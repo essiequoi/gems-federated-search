@@ -1,5 +1,12 @@
 {
+  "name": "gems",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "index:series": "node scripts/indexProductSeries.js"
+  },
   "dependencies": {
+    "algoliasearch": "^5.50.0",
     "dotenv": "^17.3.1"
   }
 }

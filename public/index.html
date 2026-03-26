@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gems Search</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/instantsearch.css@8/themes/satellite-min.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <div class="breadcrumbs">Home / <span>Search</span></div>
+
+        <div class="sidebar-header">
+          <h2>Refine Criteria</h2>
+        </div>
+
+        <div id="searchbox"></div>
+
+        <div class="facet-block">
+          <button class="facet-toggle" type="button" aria-expanded="true">
+            <span>Series</span>
+            <span>+</span>
+          </button>
+          <div id="series-refinement"></div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div id="results-meta" class="results-meta"></div>
+
+        <div class="tabs" id="tabs">
+          <button class="tab is-active" data-tab="series">
+            Product Series (<span id="count-series">0</span>)
+          </button>
+          <button class="tab" data-tab="products">
+            Part Numbers (<span id="count-products">0</span>)
+          </button>
+          <button class="tab" data-tab="documents">
+            Documents (<span id="count-documents">0</span>)
+          </button>
+          <button class="tab" data-tab="pages">
+            Pages (<span id="count-pages">0</span>)
+          </button>
+        </div>
+
+        <section class="panel is-active" data-panel="series">
+          <div id="hits-series"></div>
+          <div id="pagination-series"></div>
+        </section>
+
+        <section class="panel" data-panel="products">
+          <div id="hits-products"></div>
+          <div id="pagination-products"></div>
+        </section>
+
+        <section class="panel" data-panel="documents">
+          <div id="hits-documents"></div>
+          <div id="pagination-documents"></div>
+        </section>
+
+        <section class="panel" data-panel="pages">
+          <div id="hits-pages"></div>
+          <div id="pagination-pages"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.24.0/dist/algoliasearch-lite.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

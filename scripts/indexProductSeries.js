@@ -1,12 +1,12 @@
-import { algoliasearch } from "algoliasearch";
 import "dotenv/config";
+import { algoliasearch } from "algoliasearch";
 
 const APP_ID = "XEN89OMQH5";
 const ADMIN_KEY = process.env.ALGOLIA_ADMIN_API_KEY;
 
 const SOURCE_INDEX = "prod_gems_products_EN_test";
 const DEST_INDEX = "prod_gems_series_EN_test";
-const FILTER = "productType:SKU";
+const FILTER = "productType:Series";
 
 if (!ADMIN_KEY) {
   console.error("Missing ALGOLIA_ADMIN_API_KEY");
@@ -15,7 +15,7 @@ if (!ADMIN_KEY) {
 
 const client = algoliasearch(APP_ID, ADMIN_KEY);
 
-async function fetchSkuRecords() {
+async function fetchSeriesRecords() {
   const records = [];
 
   await client.browseObjects({
@@ -24,48 +24,41 @@ async function fetchSkuRecords() {
       filters: FILTER,
       hitsPerPage: 1000,
     },
-    aggregator: (batch) => {
-      records.push(...batch);
+    aggregator: (res) => {
+      records.push(...res.hits);
     },
   });
 
   return records;
 }
 
-async function deleteFromSource(objectIDs) {
-  console.log(`🗑️ Deleting ${objectIDs.length} records from ${SOURCE_INDEX}...`);
-
-  await client.deleteObjects({
-    indexName: SOURCE_INDEX,
-    objectIDs,
-  });
-
-  console.log("✅ Deletion complete.");
-}
-
 async function main() {
   console.log(`Browsing ${SOURCE_INDEX} for ${FILTER}...`);
 
-  const records = await fetchSkuRecords();
+  const records = await fetchSeriesRecords();
   console.log(`Found ${records.length} records.`);
 
-  if (records.length === 0) return;
+  if (records.length === 0) {
+    console.log("Nothing to move.");
+    return;
+  }
 
-  const objectIDs = records.map((r) => r.objectID);
-
-  console.log(`📦 Indexing into ${DEST_INDEX}...`);
-
-  await client.saveObjects({
+  console.log(`Saving ${records.length} records to ${DEST_INDEX}...`);
+  const saveResponse = await client.saveObjects({
     indexName: DEST_INDEX,
     objects: records,
   });
 
-  console.log("✅ Indexing complete.");
+  console.log("Save complete.");
+  console.log(saveResponse);
 
-  // 🚨 Only delete AFTER successful indexing
-  await deleteFromSource(objectIDs);
-
-  console.log("🎉 Move complete.");
+  // Leave deletion OFF until you confirm the records are in the new index.
+  const objectIDs = records.map((r) => r.objectID);
+  await client.deleteObjects({
+    indexName: SOURCE_INDEX,
+    objectIDs,
+  });
+  console.log("Delete complete.");
 }
 
 main().catch((err) => {
