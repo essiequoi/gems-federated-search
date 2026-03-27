@@ -1,5 +1,5 @@
 const APP_ID = 'XEN89OMQH5';
-const SEARCH_ONLY_API_KEY = 'REPLACE_WITH_SEARCH_ONLY_KEY';
+const SEARCH_ONLY_API_KEY = 'a684e78a4a24acf2e7391c6612d2cad1';
 
 const INDICES = {
   series: 'prod_gems_series_EN_test',
@@ -8,7 +8,7 @@ const INDICES = {
   pages: 'prod_gems_pages_EN_test'
 };
 
-// Update these if your field names differ.
+
 const FIELD_MAP = {
   series: {
     title: ['name', 'sku', 'objectID'],
